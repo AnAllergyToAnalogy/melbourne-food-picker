@@ -97,6 +97,21 @@ function parseRestaurants(){
 
     }
 
+    allLabels.Meal.sort((a,b)=>{
+       if(a === 'Breakfast'){
+           return -1;
+       }else if(b === "Breakfast"){
+            return 1
+       }else if(a === "Snack"){
+           return 1;
+       }else if(b === "Snack"){
+           return -1;
+       }else{
+           return 1;
+       }
+    });
+    allLabels.Cuisine.sort();
+
     initialised.set(get(initialised) + 1);
 
 }
