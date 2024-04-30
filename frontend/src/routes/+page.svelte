@@ -184,7 +184,9 @@
     h1{
         text-align: center;
         padding: 0 10px;
-        color: #f7941f;
+        /*color: #f7941f;*/
+        color: #84c6ff;
+
         text-shadow: black 1px 1px 5px;
     }
     h2{
