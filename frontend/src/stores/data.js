@@ -29,7 +29,7 @@ function parseClassifications(){
     const rows = SUBURBS_CLASSIFICATION_RAW.split("\r\n");
     const classification_labels = rows[0].split(",");
     for(let i = 1; i < classification_labels.length; i++){
-        const label = classification_labels[i];
+        const label = classification_labels[i].trim();
 
         classifications[label] = [];
     }
@@ -37,21 +37,19 @@ function parseClassifications(){
     for(let i = 1; i < rows.length; i++){
         const row = rows[i].split(",");
 
-        allSuburbs.push(row[0]);
+        allSuburbs.push(row[0].trim());
 
         for(let ii = 1; ii < row.length; ii++){
             if(row[ii]){
                 classifications[
                     classification_labels[ii]
-                ].push(row[0]);
+                ].push(row[0].trim());
             }
         }
     }
 
     initialised.set(get(initialised) + 1);
 
-
-    // console.log(classifications);
 }
 
 
@@ -62,7 +60,6 @@ function parseRestaurants(){
     for(let i = 1; i < restaurant_labels.length; i++){
         const label = restaurant_labels[i].trim();
 
-        // restaurants[label] = [];
         allLabels[label] = [];
     }
 
@@ -71,6 +68,10 @@ function parseRestaurants(){
         const row = rows[i].split(",");
         const name = row[0].trim();
         if(!name) continue;
+
+        if(!allSuburbs.includes(row[4].trim())){
+            console.error(row[4].trim());
+        }
 
 
         const restaurant = {
@@ -88,13 +89,7 @@ function parseRestaurants(){
 
         allRestaurants.push(restaurant);
 
-        // console.log(restaurant.name)
-
-
     }
-
-    // console.log(allRestaurants.length)
-
 
     initialised.set(get(initialised) + 1);
 
@@ -103,28 +98,6 @@ function parseRestaurants(){
 parseClassifications();
 parseRestaurants();
 
-// console.log(restaurants);
-// console.log(allLabels);
-// console.log(allSuburbs);
-
-//
-// setInterval(()=>{
-//     // console.log(RESTAURANTS_RAW);
-//     // init();
-//     // console.log(RESTAURANTS_RAW);
-//     // console.log(SUBURBS_CLASSIFICATION_RAW)
-//
-// },1000)
-//
-// let initialised = false;
-// async function init(){
-//     if(initialised) return;
-//     initialised = true;
-//
-//     // RESTAURANTS_RAW = await fetch("$lib/restaurants.csv?raw");
-//
-//     // console.log(RESTAURANTS_RAW);
-// }
 
 
 export function getSuburbs(locations){
@@ -132,7 +105,8 @@ export function getSuburbs(locations){
         return allSuburbs;
     }
     let suburbs = [];
-    for(let i = 0 ; i < locations; i++){
+
+    for(let i = 0 ; i < locations.length; i++){
         const location = locations[i];
 
         const distance = location[0];
@@ -145,10 +119,11 @@ export function getSuburbs(locations){
                     &&
                 !suburbs.includes(suburb)
             ){
-                suburbs.push(suburbs);
+                suburbs.push(suburb);
             }
         }
     }
+
     return suburbs;
 
 }
@@ -164,16 +139,13 @@ export function getRecommendations(meals,cuisines,vibes,suburbs){
     const restaurants = [];
     allRestaurants.map(restaurant =>{
 
-        // console.log(restaurant)
-
         if(
-            meals.includes(restaurant.Meal)
+               meals.includes(restaurant.Meal)
             && cuisines.includes(restaurant.Cuisine)
             && vibes.includes(restaurant.Vibe)
             && suburbs.includes(restaurant.Suburb)
         ){
             restaurants.push(restaurant);
-            // console.log("MATCH>")
         }
     });
     return restaurants;

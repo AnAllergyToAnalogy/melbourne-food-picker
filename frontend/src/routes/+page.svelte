@@ -8,17 +8,6 @@
     let location = {};
 
 
-    $:{
-        console.log(location);
-        // console.log(location_data)
-        for(let l in location){
-            if(location[l]){
-                console.log(location_data[l]);
-            }
-        }
-
-    }
-
     function toggleAllCuisineClick(){
         let toggleOn = false;
         for(let i = 0; i < allLabels.Cuisine.length; i++){
@@ -102,10 +91,9 @@
     }
 
     const states = ["welcome","meal", "cuisine", "vibe", "location", "recommend"];
-    // let state = states[0];
-    let state = "location";
+    let state = states[0];
+    // let state = "location";
 
-    // const toRecommend = ["location","recommend"];
 
     function nextClick(){
         const index = states.indexOf(state);
@@ -126,22 +114,10 @@
 
 </script>
 
-<!--<div>-->
-<!--    TEST sdf-->
-<!--</div>-->
-
-<!--<div>-->
-<!--    {#each allSuburbs as suburb}-->
-<!--        <div>{suburb}</div>-->
-<!--    {/each}-->
-<!--</div>-->
-
 <style>
     .app-area{
         width:100vw;
         height:100vh;
-
-        /*background: red;*/
 
         display: flex;
         flex-direction: column;
@@ -149,7 +125,6 @@
         align-items: center;
 
         background: linear-gradient(
-        /*90deg,*/
             #ffe9ce,
             #eedaf1
         );
@@ -162,8 +137,6 @@
         max-width:520px;
 
 
-        /*background: gold;*/
-
         flex-wrap: wrap;
 
         align-items: center;
@@ -174,41 +147,27 @@
 
     }
     .option{
-        /*outline: black solid 2px;*/
         width:130px;
-
-
-        /*text-align: center;*/
     }
 
     .location-grid{
-        /*background: red;*/
-
         display: flex;
         flex-direction: column;
 
         min-width:340px;
-        /*max-width:500px;*/
-
     }
 
     .location-row{
         display: flex;
         flex-direction: row;
-        /*background: red;*/
-
         justify-content: space-between;
     }
     .location-row span{
-        /*width: 20%;*/
-        /*outline: solid 1px black;*/
-
 
     }
     .location-distance{
         width:40%;
         text-align: right;
-        /*background: green;*/
     }
     .location-direction{
         text-align: center;
@@ -226,13 +185,13 @@
         text-align: center;
         padding: 0 10px;
         color: #f7941f;
-        /*filter: drop-shadow(*/
-        /*    0px 0px 2px black*/
-        /*);*/
         text-shadow: black 1px 1px 5px;
     }
     h2{
         color: #7b4a91;
+        max-width: 100vw;
+        text-align: center;
+        padding:  0 10px;
     }
     .info{
         text-align: center;
@@ -251,7 +210,6 @@
         cursor: pointer;
 
         border-radius: 5px;
-        /*border: solid 2px black;*/
 
         filter: drop-shadow(
             2px 2px 4px black
@@ -284,6 +242,45 @@
         font-size: 16px;
     }
 
+    .results{
+        max-height: 50vh;
+    }
+
+    .descriptive{
+        font-size: 18px;
+    }
+    .descriptive-label{
+        color: dimgray;
+        /*color: #f7941f;*/
+        padding-top: 5px;
+        font-size: 14px;
+    }
+    .matchCount{
+        margin-top:10px;
+        color: dimgray;
+        font-size: 14px;
+    }
+
+    .credit{
+        font-size: 14px;
+
+        position: fixed;
+        color: dimgray;
+
+        bottom: 0;
+        right: 0;
+
+        padding:5px;
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        justify-content: flex-start;
+
+        column-gap: 20px;
+
+    }
 
 </style>
 
@@ -369,8 +366,27 @@
                 {/each}
             </div>
         {:else if state === "recommend"}
-            <div>RECOMMEND</div>
-            <div>{validRestaurants.length}</div>
+
+            {#if recommendation}
+                <h2>{recommendation.name}</h2>
+
+
+                <div class="descriptive-label">Location</div>
+                <div class="descriptive">{recommendation.Suburb}</div>
+                <div class="descriptive-label">Cuisine</div>
+                <div class="descriptive">{recommendation.Cuisine}</div>
+                <div class="descriptive-label">Meal</div>
+                <div class="descriptive">{recommendation.Meal}</div>
+                <div class="descriptive-label">Vibe</div>
+                <div class="descriptive">{recommendation.Vibe}</div>
+
+
+                <div class="matchCount">Total matches found: {validRestaurants.length}</div>
+            {:else}
+                <div>No matching restaurants found.</div>
+            {/if}
+
+
         {:else}
             <div>ERROR</div>
         {/if}
@@ -428,3 +444,7 @@
 </div>
 
 
+<div class="credit">
+    <span>Data by Linda Lin</span>
+    <span>Code by AnAllergyToAnalogy</span>
+</div>
