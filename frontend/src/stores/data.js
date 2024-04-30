@@ -14,11 +14,22 @@ export let allRestaurants = [];
 
 export let initialised = writable(0);
 
+function lineBreak(text){
+    if(text.includes("\r\n")){
+        return "\r\n";
+    }else if(text.includes("\n")){
+        return "\n";
+    }else{
+        return "\r";
+    }
+}
+
 function parseClassifications(){
 
-    console.log(SUBURBS_CLASSIFICATION_RAW);
 
-    const rows = SUBURBS_CLASSIFICATION_RAW.split("\r\n");
+    const br = lineBreak(SUBURBS_CLASSIFICATION_RAW);
+
+    const rows = SUBURBS_CLASSIFICATION_RAW.split(br);
     const classification_labels = rows[0].split(",");
     for(let i = 1; i < classification_labels.length; i++){
         const label = classification_labels[i].trim();
@@ -49,7 +60,10 @@ function parseClassifications(){
 
 
 function parseRestaurants(){
-    const rows = RESTAURANTS_RAW.split("\r\n");
+    const br = lineBreak(RESTAURANTS_RAW);
+
+
+    const rows = RESTAURANTS_RAW.split(br);
     const restaurant_labels = rows[0].split(",");
 
     for(let i = 1; i < restaurant_labels.length; i++){
