@@ -26,6 +26,9 @@ function parseClassifications(){
         classifications[label] = [];
     }
 
+    console.log(rows);
+    console.log(rows.length);
+
     for(let i = 1; i < rows.length; i++){
         const row = rows[i].split(",");
 
