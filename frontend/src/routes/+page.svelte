@@ -290,14 +290,6 @@
 
 <div class="app-area">
 
-    <div>
-        {Object.keys(classifications).length}
-    </div>
-    <div>
-        {allSuburbs.length}
-    </div>
-
-
     {#if $initialised < 2}
         <div>Initialising...</div>
     {:else}

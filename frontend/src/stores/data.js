@@ -37,9 +37,6 @@ function parseClassifications(){
         classifications[label] = [];
     }
 
-    console.log(rows);
-    console.log(rows.length);
-
     for(let i = 1; i < rows.length; i++){
         const row = rows[i].split(",");
 
@@ -138,13 +135,6 @@ export function getSuburbs(locations){
 }
 
 export function getRecommendations(meals,cuisines,vibes,suburbs){
-
-    // console.log("RECOMMEND:")
-    // console.log(meals)
-    // console.log(cuisines)
-    // console.log(vibes)
-    // console.log(suburbs)
-
     const restaurants = [];
     allRestaurants.map(restaurant =>{
 
