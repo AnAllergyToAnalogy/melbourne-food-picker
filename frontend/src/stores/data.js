@@ -5,17 +5,6 @@ import SUBURBS_CLASSIFICATION_RAW   from "$lib/suburb-classification.csv?raw";
 import {get, writable} from "svelte/store";
 
 
-// console.log(SUBURBS_CLASSIFICATION_RAW)
-
-
-// const classification_suburbs = {};
-
-// export const RESTAURANTS_RAW            = import("$lib/restaurants.csv?raw");
-// export const SUBURBS_CLASSIFICATION_RAW = import("$lib/suburb-classification.csv");
-
-// console.log(RESTAURANTS_RAW);
-//
-// export let RESTAURANTS_RAW;
 
 export let classifications = {};
 export const allSuburbs = [];
@@ -26,6 +15,9 @@ export let allRestaurants = [];
 export let initialised = writable(0);
 
 function parseClassifications(){
+
+    console.log(SUBURBS_CLASSIFICATION_RAW);
+
     const rows = SUBURBS_CLASSIFICATION_RAW.split("\r\n");
     const classification_labels = rows[0].split(",");
     for(let i = 1; i < classification_labels.length; i++){
