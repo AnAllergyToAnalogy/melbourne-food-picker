@@ -286,6 +286,14 @@
 
     }
 
+    .emoji{
+        font-size: 60px;
+    }
+
+    .thumbnail{
+        display: none;
+    }
+
 </style>
 
 <div class="app-area">
@@ -298,6 +306,9 @@
             <h1>
                 Feed Me Melbourne
             </h1>
+            <h3 class="emoji">
+                🥧
+            </h3>
             <div class="info">
                 Restaurant picker for food in Melbs
             </div>
@@ -431,6 +442,8 @@
 
 </div>
 
+
+<img src="/pie.png" class="thumbnail" />
 
 <div class="credit">
     <span>Data by Linda Lin</span>
