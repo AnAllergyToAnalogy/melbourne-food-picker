@@ -293,7 +293,7 @@
 
         {#if state === "welcome"}
             <h1>
-                Melbourne Food Picker
+                Feed Me Melbourne
             </h1>
             <div class="info">
                 Restaurant picker for food in Melbs
@@ -304,7 +304,6 @@
             <div class="option-grid">
                 {#each allLabels.Meal as m}
                     <div class="option">
-                        <!--        <input type="checkbox" id="meal-{m}" name="meal-{m}" value="{m}">-->
                         <input type="checkbox" id="meal-{m}" bind:checked={meal[m]} >
                         <label for="meal-{m}">{m}</label><br>
                     </div>
@@ -319,8 +318,6 @@
             <div class="option-grid">
                 {#each allLabels.Cuisine as c}
                     <div class="option">
-
-                    <!--        <input type="checkbox" id="cuisine-{c}" name="cuisine-{c}" value="{c}">-->
                         <input type="checkbox" id="cuisine-{c}" bind:checked={cuisine[c]}>
                         <label for="cuisine-{c}">{c}</label>
                     </div>
@@ -334,7 +331,6 @@
 
             {#each allLabels.Vibe as v}
                 <div class="option">
-                    <!--        <input type="checkbox" id="vibe-{v}" name="vibe-{v}" value="{v}">-->
                     <input type="checkbox" id="vibe-{v}"  bind:checked={vibe[v]} >
                     <label for="vibe-{v}">{v}</label>
                 </div>
@@ -348,7 +344,6 @@
             <div class="location-grid">
                 {#each location_distances as distance,i}
                     <div class="location-row">
-                        <!--{distance},{i}-->
                         {#if i === 0}
                             <span class="location-distance">&nbsp;</span>
                         {:else}
@@ -359,7 +354,6 @@
                                 <span class="location-direction">{direction}</span>
                             {:else}
                             <span class="location-direction">
-    <!--                            <input type="checkbox" id="location-{distance}-{direction}" name="location-{distance}-{direction}" value="{distance}-{direction}">-->
                                 <input type="checkbox" bind:checked="{ location[distance+'-'+direction]}">
                             </span>
                             {/if}
@@ -418,7 +412,7 @@
                 {#if state !== "meal"}
                     <button class="back" on:click={backClick}>Back</button>
                 {:else}
-                    <!--                <button>Recommend!</button>-->
+
                 {/if}
 
                 {#if state !== "location"}
@@ -430,17 +424,6 @@
 
         {/if}
 
-
-
-
-
-        <!--    <div>-->
-        <!--        {#each Object.keys(classifications) as i}-->
-        <!--            <div>{i}</div>-->
-        <!--            <div>{classifications[i]}</div>-->
-        <!--            <br/>-->
-        <!--        {/each}-->
-        <!--    </div>-->
     {/if}
 
 </div>
