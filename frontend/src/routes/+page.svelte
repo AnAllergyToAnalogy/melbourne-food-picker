@@ -1,5 +1,5 @@
 <script>
-    import {classifications, allSuburbs, initialised, allLabels} from "../stores/data.js";
+    import {classifications, allSuburbs, initialised, allLabels, getSuburbs, getRecommendations} from "../stores/data.js";
 
 
     let meal = {}
@@ -8,9 +8,16 @@
     let location = {};
 
 
-    // $:{
-    //     console.log(location);
-    // }
+    $:{
+        console.log(location);
+        // console.log(location_data)
+        for(let l in location){
+            if(location[l]){
+                console.log(location_data[l]);
+            }
+        }
+
+    }
 
     function toggleAllCuisineClick(){
         let toggleOn = false;
@@ -33,20 +40,70 @@
 
     let location_data = {};
 
-    for(let i = 1; i < location_distances; i++){
+    for(let i = 1; i < location_distances.length; i++){
         const distance = location_distances[i];
-        for(let ii = 0; ii < location_directions; ii++){
+        for(let ii = 0; ii < location_directions.length; ii++){
             const direction = location_directions[ii];
             location_data[`${distance}-${direction}`] = [distance,direction];
         }
     }
 
+    let recommendation = null;
+    let validRestaurants = [];
     function recommend(){
+        let meals = [];
+        for(let m in meal){
+            if(meal[m]){
+                meals.push(m);
+            }
+        }
+        if(meals.length === 0){
+            meals = allLabels.Meal;
+        }
 
+        let cuisines = [];
+        for(let c in cuisine){
+            if(cuisine[c]){
+                cuisines.push(c);
+            }
+        }
+        if(cuisines.length === 0){
+            cuisines = allLabels.Cuisine;
+        }
+
+        let vibes = [];
+        for(let v in vibe){
+            if(vibe[v]){
+                vibes.push(v);
+            }
+        }
+        if(vibes.length === 0){
+            vibes = allLabels.Vibe;
+        }
+
+        let locations = [];
+        for(let l in location){
+            if(location[l]){
+                locations.push(location_data[l]);
+            }
+        }
+        let suburbs = getSuburbs(locations);
+
+
+
+        validRestaurants = getRecommendations(meals,cuisines,vibes,suburbs);
+
+        if(validRestaurants.length === 0){
+            recommendation = null;
+        }else{
+            const index = Math.floor(Math.random() * validRestaurants.length);
+            recommendation = validRestaurants[index];
+        }
     }
 
     const states = ["welcome","meal", "cuisine", "vibe", "location", "recommend"];
-    let state = states[0];
+    // let state = states[0];
+    let state = "location";
 
     // const toRecommend = ["location","recommend"];
 
@@ -84,21 +141,54 @@
         width:100vw;
         height:100vh;
 
-        background: red;
+        /*background: red;*/
 
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+
+        background: linear-gradient(
+        /*90deg,*/
+            #ffe9ce,
+            #eedaf1
+        );
     }
 
 
+    .option-grid{
+        display: flex;
+        flex-direction: row;
+        max-width:520px;
+
+
+        /*background: gold;*/
+
+        flex-wrap: wrap;
+
+        align-items: center;
+        justify-content: center;
+
+
+        padding: 20px;
+
+    }
+    .option{
+        /*outline: black solid 2px;*/
+        width:130px;
+
+
+        /*text-align: center;*/
+    }
+
     .location-grid{
+        /*background: red;*/
+
         display: flex;
         flex-direction: column;
 
-        max-width:400px;
-
+        min-width:340px;
+        /*max-width:500px;*/
 
     }
 
@@ -125,53 +215,137 @@
         width: 20%;
     }
 
+    @media screen and (max-width: 340px){
+        .location-grid {
+            min-width: initial;
+            width:100%;
+        }
+    }
+
+    h1{
+        text-align: center;
+        padding: 0 10px;
+        color: #f7941f;
+        /*filter: drop-shadow(*/
+        /*    0px 0px 2px black*/
+        /*);*/
+        text-shadow: black 1px 1px 5px;
+    }
+    h2{
+        color: #7b4a91;
+    }
+    .info{
+        text-align: center;
+        padding: 10px;
+    }
+    button{
+        color: white;
+        margin-top: 10px;
+        background: #f7941f;
+        border: none;
+
+        font-size: 20px;
+
+        padding: 5px 15px;
+
+        cursor: pointer;
+
+        border-radius: 5px;
+        /*border: solid 2px black;*/
+
+        filter: drop-shadow(
+            2px 2px 4px black
+        );
+    }
+    button:hover{
+        background: #f9af57;
+    }
+
+    button.toggle{
+        font-size:14px;
+        padding: 5px 10px;
+
+        background: #7b4a91;
+    }
+    button.toggle:hover{
+
+        background: #995db5;
+    }
+
+    button.back{
+        background: #57b3fa;
+    }
+    button.back:hover{
+        background: #84c6ff;
+    }
+
+    .hint{
+        color: dimgray;
+        font-size: 16px;
+    }
+
+
 </style>
 
 <div class="app-area">
     {#if $initialised < 2}
-
+        <div>Initialising...</div>
     {:else}
 
         {#if state === "welcome"}
-            <div>WELCOME:</div>
-
+            <h1>
+                Melbourne Food Picker
+            </h1>
+            <div class="info">
+                Restaurant picker for food in Melbs
+            </div>
 
         {:else if state === "meal"}
-            <div>MEAL:</div>
-            {#each allLabels.Meal as m}
-                <!--        <input type="checkbox" id="meal-{m}" name="meal-{m}" value="{m}">-->
-                <input type="checkbox" id="meal-{m}" bind:checked={meal[m]} >
-                <label for="meal-{m}">{m}</label><br>
-            {/each}
-            <br/>
+            <h2>MEAL</h2>
+            <div class="option-grid">
+                {#each allLabels.Meal as m}
+                    <div class="option">
+                        <!--        <input type="checkbox" id="meal-{m}" name="meal-{m}" value="{m}">-->
+                        <input type="checkbox" id="meal-{m}" bind:checked={meal[m]} >
+                        <label for="meal-{m}">{m}</label><br>
+                    </div>
+                {/each}
+            </div>
+
 
         {:else if state === "cuisine"}
 
-            <div>CUISINE:</div>
-            <button on:click={toggleAllCuisineClick}>Toggle All</button>
-            <br/>
-            {#each allLabels.Cuisine as c}
-                <!--        <input type="checkbox" id="cuisine-{c}" name="cuisine-{c}" value="{c}">-->
-                <input type="checkbox" id="cuisine-{c}" bind:checked={cuisine[c]}>
-                <label for="cuisine-{c}">{c}</label><br>
-            {/each}
-            <br/>
+            <h2>CUISINE</h2>
+            <button class="toggle" on:click={toggleAllCuisineClick}>Toggle All</button>
+            <div class="option-grid">
+                {#each allLabels.Cuisine as c}
+                    <div class="option">
 
+                    <!--        <input type="checkbox" id="cuisine-{c}" name="cuisine-{c}" value="{c}">-->
+                        <input type="checkbox" id="cuisine-{c}" bind:checked={cuisine[c]}>
+                        <label for="cuisine-{c}">{c}</label>
+                    </div>
+                {/each}
+            </div>
         {:else if state === "vibe"}
 
 
-            <div>VIBE:</div>
+            <h2>VIBE</h2>
+            <div class="option-grid">
+
             {#each allLabels.Vibe as v}
-                <!--        <input type="checkbox" id="vibe-{v}" name="vibe-{v}" value="{v}">-->
-                <input type="checkbox" id="vibe-{v}"  bind:checked={vibe[v]} >
-                <label for="vibe-{v}">{v}</label><br>
+                <div class="option">
+                    <!--        <input type="checkbox" id="vibe-{v}" name="vibe-{v}" value="{v}">-->
+                    <input type="checkbox" id="vibe-{v}"  bind:checked={vibe[v]} >
+                    <label for="vibe-{v}">{v}</label>
+                </div>
             {/each}
-            <br/>
+            </div>
 
         {:else if state === "location"}
 
 
-            <div>LOCATION:</div>
+            <h2>LOCATION</h2>
             <div class="location-grid">
                 {#each location_distances as distance,i}
                     <div class="location-row">
@@ -196,23 +370,35 @@
             </div>
         {:else if state === "recommend"}
             <div>RECOMMEND</div>
+            <div>{validRestaurants.length}</div>
         {:else}
             <div>ERROR</div>
         {/if}
 
+
+        <div class="hint">
+            {#if ["welcome","recommend"].includes(state)  }
+                &nbsp;
+            {:else}
+                None = All
+            {/if}
+        </div>
+
         {#if state === "welcome"}
             <div>
-                <button on:click={nextClick}>Begin</button>
+                <button on:click={nextClick}>Begin!</button>
             </div>
         {:else if state === "recommend"}
             <div>
-                <button on:click={backClick}>Back</button>
+                <button class="back" on:click={backClick}>Back</button>
                 <button on:click={nextClick}>Another!</button>
             </div>
         {:else}
+
+
             <div>
                 {#if state !== "meal"}
-                    <button on:click={backClick}>Back</button>
+                    <button class="back" on:click={backClick}>Back</button>
                 {:else}
                     <!--                <button>Recommend!</button>-->
                 {/if}

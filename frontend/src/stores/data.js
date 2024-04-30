@@ -21,7 +21,7 @@ export let classifications = {};
 export const allSuburbs = [];
 export const allLabels = {};
 
-export let restaurants = [];
+export let allRestaurants = [];
 
 export let initialised = writable(0);
 
@@ -49,6 +49,9 @@ function parseClassifications(){
     }
 
     initialised.set(get(initialised) + 1);
+
+
+    // console.log(classifications);
 }
 
 
@@ -83,9 +86,14 @@ function parseRestaurants(){
             }
         }
 
-        restaurants.push(restaurant);
+        allRestaurants.push(restaurant);
+
+        // console.log(restaurant.name)
+
 
     }
+
+    // console.log(allRestaurants.length)
 
 
     initialised.set(get(initialised) + 1);
@@ -117,3 +125,56 @@ parseRestaurants();
 //
 //     // console.log(RESTAURANTS_RAW);
 // }
+
+
+export function getSuburbs(locations){
+    if(locations.length === 0){
+        return allSuburbs;
+    }
+    let suburbs = [];
+    for(let i = 0 ; i < locations; i++){
+        const location = locations[i];
+
+        const distance = location[0];
+        const direction = location[1];
+
+        for(let ii = 0; ii < classifications[distance].length; ii++){
+            const suburb = classifications[distance][ii];
+
+            if( classifications[direction].includes(suburb)
+                    &&
+                !suburbs.includes(suburb)
+            ){
+                suburbs.push(suburbs);
+            }
+        }
+    }
+    return suburbs;
+
+}
+
+export function getRecommendations(meals,cuisines,vibes,suburbs){
+
+    // console.log("RECOMMEND:")
+    // console.log(meals)
+    // console.log(cuisines)
+    // console.log(vibes)
+    // console.log(suburbs)
+
+    const restaurants = [];
+    allRestaurants.map(restaurant =>{
+
+        // console.log(restaurant)
+
+        if(
+            meals.includes(restaurant.Meal)
+            && cuisines.includes(restaurant.Cuisine)
+            && vibes.includes(restaurant.Vibe)
+            && suburbs.includes(restaurant.Suburb)
+        ){
+            restaurants.push(restaurant);
+            // console.log("MATCH>")
+        }
+    });
+    return restaurants;
+}
