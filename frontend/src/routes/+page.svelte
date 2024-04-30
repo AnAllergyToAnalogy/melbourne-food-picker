@@ -214,6 +214,8 @@
         filter: drop-shadow(
             2px 2px 4px black
         );
+        margin-left: 5px;
+        margin-right: 5px;
     }
     button:hover{
         background: #f9af57;
